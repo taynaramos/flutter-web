@@ -18,26 +18,68 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final List<String> imageUrls = [
+    'https://picsum.photos/400/400?random=1',
+    'https://picsum.photos/400/400?random=2',
+    'https://picsum.photos/400/400?random=3',
+    'https://picsum.photos/400/400?random=4',
+  ];
+
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Size screenSize = MediaQuery.of(context).size;
+    Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(title: Text('Image Gallery')),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          if (constraints.maxWidth < 600) {
-            return ListView(children: buildImageList());
-          } else {
-            return GridView.count(
-              crossAxisCount: 3,
-              children: buildImageList(),
-            );
-          }
-        },
-      ),
+      body:
+          screenSize.width < 600
+              ? ListView.builder(
+                itemCount: imageUrls.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Image.network(
+                      imageUrls[index],
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                },
+              )
+              : GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: screenSize.width > 1200 ? 4 : 3,
+                ),
+                itemCount: imageUrls.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Image.network(
+                      imageUrls[index],
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                },
+              ),
+
+      // ** Using LayoutBuilder to apply different layout based on screen size
+      // LayoutBuilder(
+      //   builder: (context, constraints) {
+      //     if (constraints.maxWidth < 600) {
+      //       return ListView(children: buildImageList());
+      //     } else {
+      //       return GridView.count(
+      //         crossAxisCount: 3,
+      //         children: buildImageList(),
+      //       );
+      //     }
+      //   },
+      // ),
+
+      // ** Using MediaQuery to aplpy different layout based on screen size
       // Center(
       //   child:
       //       screenSize.width < 600
