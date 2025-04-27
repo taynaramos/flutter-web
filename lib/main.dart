@@ -22,29 +22,47 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
+    // Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(title: Text('Image Gallery')),
-      body: Center(
-        child:
-            screenSize.width < 600
-                ? Column(
-                  children: [
-                    Image.network('https://picsum.photos/200/200?random=1'),
-                    SizedBox(height: 20),
-                    Image.network('https://picsum.photos/200/200?random=2'),
-                  ],
-                )
-                : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.network('https://picsum.photos/200/200?random=1'),
-                    SizedBox(width: 20),
-                    Image.network('https://picsum.photos/200/200?random=2'),
-                  ],
-                ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth < 600) {
+            return ListView(children: buildImageList());
+          } else {
+            return GridView.count(
+              crossAxisCount: 3,
+              children: buildImageList(),
+            );
+          }
+        },
       ),
+      // Center(
+      //   child:
+      //       screenSize.width < 600
+      //           ? Column(
+      //             children: [
+      //               Image.network('https://picsum.photos/200/200?random=1'),
+      //               SizedBox(height: 20),
+      //               Image.network('https://picsum.photos/200/200?random=2'),
+      //             ],
+      //           )
+      //           : Row(
+      //             mainAxisAlignment: MainAxisAlignment.center,
+      //             children: [
+      //               Image.network('https://picsum.photos/200/200?random=1'),
+      //               SizedBox(width: 20),
+      //               Image.network('https://picsum.photos/200/200?random=2'),
+      //             ],
+      //           ),
+      // ),
     );
+  }
+
+  List<Widget> buildImageList() {
+    return List.generate(12, (index) {
+      return Image.network('https://picsum.photos/200/200?random=$index');
+    });
   }
 }
