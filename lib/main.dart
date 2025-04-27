@@ -6,37 +6,45 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Image Gallery App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: HomeScreen(),
     );
   }
-
 }
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
- @override
+  @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Image Gallery'),
-      ),
+      appBar: AppBar(title: Text('Image Gallery')),
       body: Center(
-        child: Column(
-          children: [
-            Image.network('https://picsum.photos/200/200?random=1'),
-            Image.network('https://picsum.photos/200/200?random=2')
-          ],
-        ),
-      )
+        child:
+            screenSize.width < 600
+                ? Column(
+                  children: [
+                    Image.network('https://picsum.photos/200/200?random=1'),
+                    SizedBox(height: 20),
+                    Image.network('https://picsum.photos/200/200?random=2'),
+                  ],
+                )
+                : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.network('https://picsum.photos/200/200?random=1'),
+                    SizedBox(width: 20),
+                    Image.network('https://picsum.photos/200/200?random=2'),
+                  ],
+                ),
+      ),
     );
   }
 }
